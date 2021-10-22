@@ -228,7 +228,7 @@ screens = [
                 left_arrow(colors['bg'], colors['dark-blue']),
                 # display total available updates
                 widget.CheckUpdates(
-                    distro='Arch',
+                    distro="Arch_checkupdates",
                     margin=30,
                     padding=10,
                     colour_have_updates=colors['cyan'],
@@ -254,7 +254,7 @@ screens = [
                     padding=10,
                     format=' {freq_current}GHz {load_percent}%'),
 
-                left_arrow(colors['magenta'], colors['dark-cyan']),
+                left_arrow(colors['dark-magenta'], colors['dark-cyan']),
                 widget.PulseVolume(
                     background=colors['dark-cyan'],
                     fmt=' {}',
