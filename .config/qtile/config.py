@@ -26,6 +26,7 @@
 # SOFTWARE.
 
 from typing import List  # noqa: F401
+from libqtile import qtile
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
@@ -35,7 +36,6 @@ from libqtile.widget import TextBox
 mod = "mod4"
 terminal = "alacritty"
 browser = "brave"
-
 
 colors = {
     'bg':           '#202020',
@@ -57,6 +57,10 @@ colors = {
 }
 
 keys = [
+    # Aplication spawn
+    Key([mod], "Return", lazy.spawn(terminal)),  # Launches Alacritty
+    Key([mod], "b", lazy.spawn(browser)),
+
     # Switch between windows
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
@@ -140,13 +144,6 @@ layouts = [
     layout.Tile(),
     layout.TreeTab(),
     layout.Floating()
-    # Try more layouts by unleashing below layouts.
-    # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
-    # layout.Matrix(),
-    # layout.RatioTile(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
 ]
 
 widget_defaults = dict(
@@ -157,6 +154,7 @@ widget_defaults = dict(
 )
 
 extension_defaults = widget_defaults.copy()
+
 
 def lower_left_triangle(bg_color, fg_color):
     return TextBox(
@@ -196,7 +194,6 @@ screens = [
                     padding=10,
                     background=colors['dark-red'],
                     foreground=colors['fg']),
-                # right_arrow(colors['bg'], colors['dark-red']),
                 lower_left_triangle(colors['dark-red'], colors['bg']),
 
                 # display groups
@@ -238,7 +235,8 @@ screens = [
                     colour_no_updates=colors['fg'],
                     no_update_string='No updates',
                     display_format='累 {updates} updates',
-                    background=colors['dark-blue']),
+                    background=colors['dark-blue'],
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')}),
 
                 left_arrow(colors['dark-blue'], colors['blue']),
                 # display memory usage
@@ -246,7 +244,8 @@ screens = [
                     background=colors['blue'],
                     padding=10,
                     measure_mem='G',
-                    format=' {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}'),
+                    format=' {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')}),
 
                 left_arrow(colors['blue'], colors['dark-magenta']),
                 # display cpu usage
@@ -254,14 +253,6 @@ screens = [
                     background=colors['dark-magenta'],
                     padding=10,
                     format=' {freq_current}GHz {load_percent}%'),
-
-                left_arrow(colors['dark-magenta'], colors['magenta']),
-                # Display essid and connection strength
-                widget.Wlan(
-                    background=colors['magenta'],
-                    padding=10,
-                    format='直 {essid} {percent:2.0%}',
-                    interface='wlp2s0'),
 
                 left_arrow(colors['magenta'], colors['dark-cyan']),
                 widget.PulseVolume(
