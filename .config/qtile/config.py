@@ -63,9 +63,12 @@ keys = [
     Key([mod], "Return", lazy.spawn(terminal)),  # Launches Alacritty
     Key([mod], "b", lazy.spawn(browser)),
     Key([mod], "p", lazy.spawn("pcmanfm")),
-    Key([mod], "a", lazy.spawn("xfce4-appfinder")),
-    Key([mod], "x", lazy.spawn("arcolinux-logout")),
-    Key([mod, "shift"], "d", lazy.spawn("rofi -show drun")),
+    Key([mod], "t", lazy.spawn('xterm')),
+    Key([mod], "d", lazy.spawn("nwggrid -p -o 0.4")),
+    Key([mod, "shift"], "Return", lazy.spawn(
+        "dmenu_run -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=14'")),
+    Key(["control"], "space", lazy.spawn("rofi -show drun")),
+    Key([mod, "shift"], "Tab", lazy.spawn("rofi -show window")),
 
     # SUPER + FUNCTION KEYS
 
@@ -165,18 +168,18 @@ keys = [
 ]
 
 groups = [
-    Group('1', label='一', matches=[Match(wm_class=[browser])]),
-    Group('2', label='二', matches=[Match(wm_class=['gimp'])]),
-    Group('3', label='三', matches=[Match(wm_class=['nemo'])]),
-    Group('4', label='四', matches=[Match(wm_class=['zoom',
+    Group('1', label='WWW'),
+    Group('2', label='DEV', matches=[Match(wm_class=['code'])]),
+    Group('3', label='SYS', matches=[Match(wm_class=['nemo'])]),
+    Group('4', label='CHAT', matches=[Match(wm_class=['zoom',
                                                    'discord',
                                                    'telegram-desktop',
                                                    'slack'])]),
-    Group('5', label='五'),
-    Group('6', label='六'),
-    Group('7', label='七'),
-    Group('8', label='八'),
-    Group('9', label='九'),
+    Group('5', label='MUS', matches=[Match(wm_class=['spotify'])]),
+    Group('6', label='GFX'),
+    Group('7', label='VID'),
+    Group('8', label='DOC'),
+    Group('9', label='VBOX'),
 ]
 
 for i in groups:
@@ -194,9 +197,9 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 
-layout_theme = {"border_width": 1,
+layout_theme = {"border_width": 2,
                 "margin": 10,
-                "border_focus": "e1acff",
+                "border_focus": "e7a55f",
                 "border_normal": "1D2330"
                 }
 
@@ -218,49 +221,16 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 
-def lower_left_triangle(bg_color, fg_color):
-    return TextBox(
-        text='\ue0be',
-        padding=0,
-        fontsize=22,
-        background=bg_color,
-        foreground=fg_color)
-
-
-def left_arrow(bg_color, fg_color):
-    return TextBox(
-        text='\uE0B2',
-        padding=0,
-        fontsize=22,
-        background=bg_color,
-        foreground=fg_color)
-
-
-def right_arrow(bg_color, fg_color):
-    return TextBox(
-        text='\uE0B0',
-        padding=0,
-        fontsize=22,
-        background=bg_color,
-        foreground=fg_color)
-
-
 screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.TextBox(
-                    text='',  # arch logo
-                    fontsize=22,
-                    padding=10,
+                widget.Image(
+                    filename="~/.config/qtile/icons/logo.png",
                     background=colors['dark-red'],
-                    foreground=colors['fg']),
-                widget.TextBox(
-                    text='\ue0be',
-                    padding=0,
-                    fontsize=22,
-                    foreground=colors['bg']),
-
+                    foreground=colors['fg'],
+                    margin=3
+                ),
                 # display groups
                 widget.GroupBox(
                     active=colors['fg'],
@@ -273,24 +243,20 @@ screens = [
                     block_highlight_text_color=colors['red'],
                     highlight_color=colors['bg']),
 
-                right_arrow(colors['dark-yellow'], colors['bg']),
                 # display the current wm layout
                 widget.CurrentLayout(
                     background=colors['dark-yellow'],
                     fmt='[{}]',
                     padding=10),
 
-                right_arrow(colors['yellow'], colors['dark-yellow']),
                 widget.WindowCount(
                     background=colors['yellow'],
                     padding=5,
                     fmt=' {}'),
-                right_arrow(colors['bg'], colors['yellow']),
                 widget.WindowName(
                     foreground=colors['cyan'],
                     padding=10),
 
-                left_arrow(colors['bg'], colors['dark-blue']),
                 # display total available updates
                 widget.CheckUpdates(
                     distro="Arch_checkupdates",
@@ -303,7 +269,6 @@ screens = [
                     background=colors['dark-blue'],
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')}),
 
-                left_arrow(colors['dark-blue'], colors['blue']),
                 # display memory usage
                 widget.Memory(
                     background=colors['blue'],
@@ -312,37 +277,32 @@ screens = [
                     format=' {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')}),
 
-                left_arrow(colors['blue'], colors['dark-magenta']),
                 # display cpu usage
                 widget.CPU(
                     background=colors['dark-magenta'],
                     padding=10,
                     format=' {freq_current}GHz {load_percent}%'),
 
-                left_arrow(colors['dark-magenta'], colors['dark-cyan']),
                 widget.PulseVolume(
                     background=colors['dark-cyan'],
                     fmt=' {}',
                     padding=10,
                     volume_app='pavucontrol'),
 
-                left_arrow(colors['dark-cyan'], colors['cyan']),
                 widget.Clock(
                     format='%Y-%m-%d %a %I:%M %p',
                     background=colors['cyan'],
                     padding=10),
 
-                left_arrow(colors['cyan'], colors['dark-cyan']),
                 widget.Systray(
                     background=colors['dark-cyan'],
                     padding=10),
 
                 widget.Spacer(
-                    length=50,
+                    length=30,
                     background=colors['dark-cyan']
                 ),
 
-                left_arrow(colors['dark-cyan'], colors['green']),
                 widget.QuickExit(
                     background=colors['green'],
                     foreground=colors['bg'],
@@ -353,7 +313,6 @@ screens = [
             size=24,
             margin=5,
             background=colors['bg'],
-            wallpaper='wall.jpg'
         ),
     ),
 ]
@@ -367,34 +326,80 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
+main = None
+
+
+@hook.subscribe.startup_once
+def start_once():
+    home = os.path.expanduser('~')
+    subprocess.call([home + '/.config/qtile/scripts/autostart.sh'])
+
+
+@hook.subscribe.startup
+def start_always():
+    # Set the cursor to something sane in X
+    subprocess.Popen(['xsetroot', '-cursor_name', 'left_ptr'])
+
+
+@hook.subscribe.client_new
+def set_floating(window):
+    if (window.window.get_wm_transient_for()
+            or window.window.get_wm_type() in floating_types):
+        window.floating = True
+
+
+floating_types = ["notification", "toolbar", "splash", "dialog"]
+
+
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
     *layout.Floating.default_float_rules,
-    Match(wm_class='confirmreset'),  # gitk
-    Match(wm_class='makebranch'),  # gitk
-    Match(wm_class='maketag'),  # gitk
-    Match(wm_class='ssh-askpass'),  # ssh-askpass
-    Match(title='branchdialog'),  # gitk
-    Match(title='pinentry'),  # GPG key password entry
-])
+    Match(wm_class='confirm'),
+    Match(wm_class='dialog'),
+    Match(wm_class='download'),
+    Match(wm_class='error'),
+    Match(wm_class='file_progress'),
+    Match(wm_class='notification'),
+    Match(wm_class='splash'),
+    Match(wm_class='toolbar'),
+    Match(wm_class='confirmreset'),
+    Match(wm_class='makebranch'),
+    Match(wm_class='maketag'),
+    Match(wm_class='Arandr'),
+    Match(wm_class='feh'),
+    Match(wm_class='Galculator'),
+    Match(title='branchdialog'),
+    Match(title='Open File'),
+    Match(title='pinentry'),
+    Match(wm_class='ssh-askpass'),
+    Match(wm_class='lxpolkit'),
+    Match(wm_class='Lxpolkit'),
+    Match(wm_class='yad'),
+    Match(wm_class='Yad'),
+    Match(wm_class='Cairo-dock'),
+    Match(wm_class='cairo-dock'),
+
+
+],  fullscreen_border_width=0, border_width=0)
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
+
+focus_on_window_activation = "focus"  # or smart
 
 # If things like steam games want to auto-minimize themselves when losing
 # focus, should we respect this or not?
 auto_minimize = True
 
+
 @hook.subscribe.startup_once
 def start_once():
     home = os.path.expanduser('~')
     subprocess.call([home + '/.config/qtile/autostart.sh'])
-
 
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
