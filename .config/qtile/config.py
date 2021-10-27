@@ -40,34 +40,36 @@ terminal = "alacritty"
 browser = "brave"
 
 colors = {
-    'bg':           '#202020',
-    'fg':           '#dfdfdf',
-    'dark-red':     '#ea7171',
-    'red':          '#ed8682',
+    'bg':           '#15141b',
+    'fg':           '#edecee',
+    'dark-purple':     '#3d375e7f',
+    'purple':          '#a277ff',
     'dark-green':   '#96a171',
-    'green':        '#b1d094',
+    'green':        '#61ffca',
     'dark-yellow':  '#e7a55f',
-    'yellow':       '#ecb983',
-    'dark-blue':    '#7196a1',
-    'blue':         '#9fb8bf',
-    'dark-magenta': '#c28490',
+    'yellow':       '#ffca85',
+    'dark-blue':    '#7B68EE',
+    'blue':         '#4682B4',
+    'dark-magenta': '#c55858',
     'magenta':      '#d7adb5',
     'dark-cyan':    '#80ab96',
-    'cyan':         '#9fbfaf',
+    'cyan':         '#2F4F4F',
     'dark-gray':    '#3d3d3d',
-    'gray':         '#666666',
+    'gray':         '#6d6d6d',
 }
 
 keys = [
     # Aplication spawn
     Key([mod], "Return", lazy.spawn(terminal)),  # Launches Alacritty
     Key([mod], "b", lazy.spawn(browser)),
-    Key([mod], "p", lazy.spawn("pcmanfm")),
+    Key([mod], "p", lazy.spawn("dolphin")),
+    Key([mod], "g", lazy.spawn("galculator")),
     Key([mod], "t", lazy.spawn('xterm')),
+    Key([mod], "c", lazy.spawn('code')),
     Key([mod], "d", lazy.spawn("nwggrid -p -o 0.4")),
     Key([mod, "shift"], "Return", lazy.spawn(
-        "dmenu_run -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=14'")),
-    Key(["control"], "space", lazy.spawn("rofi -show drun")),
+        "dmenu_run")),
+    Key([mod], "space", lazy.spawn("rofi -show drun")),
     Key([mod, "shift"], "Tab", lazy.spawn("rofi -show window")),
 
     # SUPER + FUNCTION KEYS
@@ -82,7 +84,7 @@ keys = [
 
     # QTILE LAYOUT KEYS
     Key([mod], "n", lazy.layout.normalize()),
-    Key([mod], "space", lazy.next_layout()),
+    Key([mod], "l", lazy.next_layout()),
 
     # CHANGE FOCUS
     Key([mod], "Up", lazy.layout.up()),
@@ -197,10 +199,9 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 
-layout_theme = {"border_width": 2,
+layout_theme = {"border_width": 1,
                 "margin": 10,
-                "border_focus": "e7a55f",
-                "border_normal": "1D2330"
+                "border_focus": "a277ff"
                 }
 
 layouts = [
@@ -227,9 +228,10 @@ screens = [
             [
                 widget.Image(
                     filename="~/.config/qtile/icons/logo.png",
-                    background=colors['dark-red'],
+                    background=colors['dark-purple'],
                     foreground=colors['fg'],
-                    margin=3
+                    margin=3,
+                    mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn("nwggrid -p -o 0.4")}
                 ),
                 # display groups
                 widget.GroupBox(
@@ -240,17 +242,17 @@ screens = [
                     margin_x=0,
                     padding_x=10,
                     highlight_method='line',
-                    block_highlight_text_color=colors['red'],
+                    block_highlight_text_color=colors['purple'],
                     highlight_color=colors['bg']),
 
                 # display the current wm layout
                 widget.CurrentLayout(
-                    background=colors['dark-yellow'],
+                    background=colors['dark-purple'],
                     fmt='[{}]',
                     padding=10),
 
                 widget.WindowCount(
-                    background=colors['yellow'],
+                    background=colors['purple'],
                     padding=5,
                     fmt=' {}'),
                 widget.WindowName(
@@ -262,45 +264,45 @@ screens = [
                     distro="Arch_checkupdates",
                     margin=30,
                     padding=10,
-                    colour_have_updates=colors['cyan'],
+                    colour_have_updates=colors['fg'],
                     colour_no_updates=colors['fg'],
                     no_update_string='No updates',
-                    display_format='累 {updates} updates',
-                    background=colors['dark-blue'],
+                    display_format='{updates} updates',
+                    background=colors['dark-purple'],
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')}),
 
                 # display memory usage
                 widget.Memory(
-                    background=colors['blue'],
+                    background=colors['dark-purple'],
                     padding=10,
                     measure_mem='G',
                     format=' {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
-                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')}),
+                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e bpytop')}),
 
                 # display cpu usage
                 widget.CPU(
-                    background=colors['dark-magenta'],
+                    background=colors['blue'],
                     padding=10,
                     format=' {freq_current}GHz {load_percent}%'),
 
                 widget.PulseVolume(
-                    background=colors['dark-cyan'],
+                    background=colors['dark-purple'],
                     fmt=' {}',
                     padding=10,
                     volume_app='pavucontrol'),
 
                 widget.Clock(
-                    format='%Y-%m-%d %a %I:%M %p',
-                    background=colors['cyan'],
+                    format='%d.%B %H:%M:%S',
+                    background=colors['bg'],
                     padding=10),
 
                 widget.Systray(
-                    background=colors['dark-cyan'],
+                    background=colors['dark-purple'],
                     padding=10),
 
                 widget.Spacer(
                     length=30,
-                    background=colors['dark-cyan']
+                    background=colors['dark-purple']
                 ),
 
                 widget.QuickExit(
@@ -311,7 +313,6 @@ screens = [
                 )
             ],
             size=24,
-            margin=5,
             background=colors['bg'],
         ),
     ),
