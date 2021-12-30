@@ -1,4 +1,3 @@
-
 # Copyright (c) 2010 Aldo Cortesi
 # Copyright (c) 2010, 2014 dequis
 # Copyright (c) 2012 Randall Ma
@@ -36,8 +35,8 @@ from libqtile.utils import guess_terminal
 from libqtile.widget import TextBox
 
 mod = "mod4"
-terminal = "alacritty"
-browser = "brave"
+terminal = "konsole"
+browser = "firefox-developer-edition"
 
 colors = {
     'bg':           '#15141b',
@@ -62,7 +61,7 @@ keys = [
     # Aplication spawn
     Key([mod], "Return", lazy.spawn(terminal)),  # Launches Alacritty
     Key([mod], "b", lazy.spawn(browser)),
-    Key([mod], "p", lazy.spawn("dolphin")),
+    Key([mod], "p", lazy.spawn("pcmanfm")),
     Key([mod], "g", lazy.spawn("galculator")),
     Key([mod], "t", lazy.spawn('xterm')),
     Key([mod], "c", lazy.spawn('code')),
@@ -199,21 +198,19 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 
-layout_theme = {"border_width": 1,
-                "margin": 10,
-                "border_focus": "a277ff"
+layout_theme = {"border_width": 2,
+                "margin": 25,
+                "border_focus": colors['fg'],
                 }
 
 layouts = [
     layout.MonadTall(**layout_theme),
-    layout.MonadWide(**layout_theme),
-    layout.Tile(**layout_theme),
-    layout.TreeTab(**layout_theme),
+    layout.Max(**layout_theme),
     layout.Floating(**layout_theme)
 ]
 
 widget_defaults = dict(
-    font='Ubuntu Mono',
+    font='Firacode',
     fontsize=12,
     background=colors['bg'],
     foreground=colors['fg']
@@ -240,23 +237,24 @@ screens = [
                     disable_drag=True,
                     borderwidth=0,
                     margin_x=0,
-                    padding_x=10,
+                    padding_x=9,
+                    fontsize=10,
                     highlight_method='line',
                     block_highlight_text_color=colors['purple'],
                     highlight_color=colors['bg']),
 
                 # display the current wm layout
                 widget.CurrentLayout(
-                    background=colors['dark-purple'],
+                    background=colors['bg'],
                     fmt='[{}]',
                     padding=10),
 
                 widget.WindowCount(
-                    background=colors['purple'],
+                    background=colors['dark-purple'],
                     padding=5,
                     fmt=' {}'),
                 widget.WindowName(
-                    foreground=colors['cyan'],
+                    foreground=colors['fg'],
                     padding=10),
 
                 # display total available updates
@@ -268,25 +266,18 @@ screens = [
                     colour_no_updates=colors['fg'],
                     no_update_string='No updates',
                     display_format='{updates} updates',
-                    background=colors['dark-purple'],
+                    background=colors['bg'],
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')}),
-
-                # display memory usage
-                widget.Memory(
-                    background=colors['dark-purple'],
-                    padding=10,
-                    measure_mem='G',
-                    format=' {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}',
-                    mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e bpytop')}),
 
                 # display cpu usage
                 widget.CPU(
-                    background=colors['blue'],
+                    background=colors['bg'],
                     padding=10,
-                    format=' {freq_current}GHz {load_percent}%'),
+                    format=' {freq_current}GHz {load_percent}%',
+					mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e bpytop')}),
 
                 widget.PulseVolume(
-                    background=colors['dark-purple'],
+                    background=colors['bg'],
                     fmt=' {}',
                     padding=10,
                     volume_app='pavucontrol'),
@@ -297,23 +288,19 @@ screens = [
                     padding=10),
 
                 widget.Systray(
-                    background=colors['dark-purple'],
+                    background=colors['bg'],
                     padding=10),
 
-                widget.Spacer(
-                    length=30,
-                    background=colors['dark-purple']
-                ),
-
                 widget.QuickExit(
-                    background=colors['green'],
-                    foreground=colors['bg'],
+                    background=colors['dark-purple'],
+                    foreground=colors['fg'],
                     default_text='',
                     fontsize=17,
                 )
             ],
             size=24,
             background=colors['bg'],
+            opacity=0.9,
         ),
     ),
 ]
