@@ -61,7 +61,7 @@ keys = [
     # Aplication spawn
     Key([mod], "Return", lazy.spawn(terminal)),  # Launches Alacritty
     Key([mod], "b", lazy.spawn(browser)),
-    Key([mod], "p", lazy.spawn("pcmanfm")),
+    Key([mod], "p", lazy.spawn("thunar")),
     Key([mod], "g", lazy.spawn("galculator")),
     Key([mod], "t", lazy.spawn('xterm')),
     Key([mod], "c", lazy.spawn('code')),
@@ -224,10 +224,10 @@ screens = [
         top=bar.Bar(
             [
                 widget.Image(
-                    filename="~/.config/qtile/icons/logo.png",
-                    background=colors['dark-purple'],
+                    filename="~/.config/qtile/icons/bars-solid.svg",
+                    background=colors['bg'],
                     foreground=colors['fg'],
-                    margin=3,
+                    margin=5,
                     mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn("nwggrid -p -o 0.4")}
                 ),
                 # display groups
@@ -249,10 +249,18 @@ screens = [
                     fmt='[{}]',
                     padding=10),
 
+                widget.Image(
+                    filename="~/.config/qtile/icons/window-restore-regular.svg",
+                    background=colors['dark-purple'],
+                    foreground=colors['fg'],
+                    margin=7,
+                ),
+
                 widget.WindowCount(
+                    filename="~/.config/qtile/icons/window-restore-regular.svg",
                     background=colors['dark-purple'],
                     padding=5,
-                    fmt=' {}'),
+                    fmt='{}'),
                 widget.WindowName(
                     foreground=colors['fg'],
                     padding=10),
@@ -273,13 +281,20 @@ screens = [
                 widget.CPU(
                     background=colors['bg'],
                     padding=10,
-                    format=' {freq_current}GHz {load_percent}%',
+                    format='{freq_current}GHz {load_percent}%',
 					mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e bpytop')}),
+
+                widget.Image(
+                    filename="~/.config/qtile/icons/volume-up-solid.svg",
+                    background=colors['bg'],
+                    foreground=colors['fg'],
+                    margin=5,
+                ),
 
                 widget.PulseVolume(
                     background=colors['bg'],
-                    fmt=' {}',
-                    padding=10,
+                    fmt='{}',
+                    padding=2,
                     volume_app='pavucontrol'),
 
                 widget.Clock(
@@ -291,12 +306,12 @@ screens = [
                     background=colors['bg'],
                     padding=10),
 
-                widget.QuickExit(
-                    background=colors['dark-purple'],
+                widget.Image(
+                    filename="~/.config/qtile/icons/power-off-solid.svg",
+                    background=colors['bg'],
                     foreground=colors['fg'],
-                    default_text='',
-                    fontsize=17,
-                )
+                    margin=5,
+                ),
             ],
             size=24,
             background=colors['bg'],
