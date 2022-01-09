@@ -35,12 +35,13 @@ from libqtile.utils import guess_terminal
 from libqtile.widget import TextBox
 
 mod = "mod4"
-terminal = "konsole"
-browser = "firefox-developer-edition"
+terminal = "alacritty"
+browser = "firefox"
 
 colors = {
-    'bg':           '#15141b',
-    'fg':           '#edecee',
+    'bg':           '#000000',
+    'fg':           '#ffffff',
+    'bg2':          '#202021',
     'dark-purple':     '#3d375e7f',
     'purple':          '#a277ff',
     'dark-green':   '#96a171',
@@ -169,18 +170,14 @@ keys = [
 ]
 
 groups = [
-    Group('1', label='WWW'),
-    Group('2', label='DEV', matches=[Match(wm_class=['code'])]),
-    Group('3', label='SYS', matches=[Match(wm_class=['nemo'])]),
-    Group('4', label='CHAT', matches=[Match(wm_class=['zoom',
+    Group('1', label=''),
+    Group('2', label='', matches=[Match(wm_class=['code'])]),
+    Group('3', label='', matches=[Match(wm_class=['nemo'])]),
+    Group('4', label='', matches=[Match(wm_class=['zoom',
                                                    'discord',
                                                    'telegram-desktop',
                                                    'slack'])]),
-    Group('5', label='MUS', matches=[Match(wm_class=['spotify'])]),
-    Group('6', label='GFX'),
-    Group('7', label='VID'),
-    Group('8', label='DOC'),
-    Group('9', label='VBOX'),
+    Group('5', label='', matches=[Match(wm_class=['spotify'])]),
 ]
 
 for i in groups:
@@ -198,7 +195,7 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 
-layout_theme = {"border_width": 2,
+layout_theme = {"border_width": 1,
                 "margin": 25,
                 "border_focus": colors['fg'],
                 }
@@ -210,8 +207,9 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='Firacode',
-    fontsize=12,
+    font='Cascadia Code',
+    fontsize=13,
+    padding=10,
     background=colors['bg'],
     foreground=colors['fg']
 )
@@ -223,99 +221,63 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.Image(
-                    filename="~/.config/qtile/icons/bars-solid.svg",
-                    background=colors['bg'],
-                    foreground=colors['fg'],
-                    margin=5,
-                    mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn("nwggrid -p -o 0.4")}
-                ),
-                # display groups
                 widget.GroupBox(
                     active=colors['fg'],
                     inactive=colors['dark-gray'],
                     disable_drag=True,
                     borderwidth=0,
-                    margin_x=0,
-                    padding_x=9,
-                    fontsize=10,
+                    padding_x=10,
                     highlight_method='line',
                     block_highlight_text_color=colors['purple'],
-                    highlight_color=colors['bg']),
+                    highlight_color=colors['bg2']),
 
-                # display the current wm layout
                 widget.CurrentLayout(
-                    background=colors['bg'],
-                    fmt='[{}]',
-                    padding=10),
-
-                widget.Image(
-                    filename="~/.config/qtile/icons/window-restore-regular.svg",
-                    background=colors['dark-purple'],
-                    foreground=colors['fg'],
-                    margin=7,
-                ),
+                    fmt=' {}'),
 
                 widget.WindowCount(
-                    filename="~/.config/qtile/icons/window-restore-regular.svg",
-                    background=colors['dark-purple'],
-                    padding=5,
-                    fmt='{}'),
-                widget.WindowName(
-                    foreground=colors['fg'],
-                    padding=10),
+                    fmt=' {}'),
 
-                # display total available updates
+                widget.WindowName(
+                    fmt='{}'),
+
                 widget.CheckUpdates(
                     distro="Arch_checkupdates",
-                    margin=30,
-                    padding=10,
                     colour_have_updates=colors['fg'],
                     colour_no_updates=colors['fg'],
-                    no_update_string='No updates',
-                    display_format='{updates} updates',
+                    no_update_string=' 0',
+                    display_format=' {updates}',
                     background=colors['bg'],
                     mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')}),
 
-                # display cpu usage
                 widget.CPU(
                     background=colors['bg'],
-                    padding=10,
-                    format='{freq_current}GHz {load_percent}%',
+                    format=' {load_percent}%',
 					mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(terminal + ' -e bpytop')}),
-
-                widget.Image(
-                    filename="~/.config/qtile/icons/volume-up-solid.svg",
-                    background=colors['bg'],
-                    foreground=colors['fg'],
-                    margin=5,
-                ),
 
                 widget.PulseVolume(
                     background=colors['bg'],
-                    fmt='{}',
-                    padding=2,
+                    fmt=' {}',
                     volume_app='pavucontrol'),
 
                 widget.Clock(
-                    format='%d.%B %H:%M:%S',
-                    background=colors['bg'],
-                    padding=10),
+                    format=' %H:%M',
+                    background=colors['bg']),
 
                 widget.Systray(
-                    background=colors['bg'],
-                    padding=10),
+                    background=colors['bg']),
+                
+                widget.TextBox(
+                    fontsize=16,
+                    text='',
+                    mouse_callbacks= {
+                        'Button1':
+                        lambda: qtile.cmd_spawn(os.path.expanduser('~/.config/rofi/powermenu.sh'))
+                    })
 
-                widget.Image(
-                    filename="~/.config/qtile/icons/power-off-solid.svg",
-                    background=colors['bg'],
-                    foreground=colors['fg'],
-                    margin=5,
-                ),
             ],
-            size=24,
+            size=34,
+            margin=5,
             background=colors['bg'],
-            opacity=0.9,
         ),
     ),
 ]
