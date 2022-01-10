@@ -15,6 +15,7 @@ configuration {
   rad: 0px;
   background-color: @bg;
   text-color: @fg;
+  width: 300px;
 }
 
 mainbox {
@@ -42,13 +43,13 @@ prompt {
 entry {
   blink: false;
   padding: 0 1.5% 0 0;
-  placeholder: "Search through apps";
+  placeholder: "Choose";
   placeholder-color: grey;
 }
 
 listview {
   layout: vertical;
-  lines: 3;
+  lines: 5;
   columns: 4;
   cycle: false;
 }
@@ -65,7 +66,7 @@ element-text, element-icon {
 }
 
 element-text { expand: true; }
-element-icon { size: 48px; }
+element-icon { size: 0px; }
 
 listview, element, element selected, element-text, element-icon {
   cursor: pointer;

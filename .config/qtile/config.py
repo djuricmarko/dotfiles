@@ -35,27 +35,15 @@ from libqtile.utils import guess_terminal
 from libqtile.widget import TextBox
 
 mod = "mod4"
-terminal = "alacritty"
+terminal = "kitty"
 browser = "firefox"
 
 colors = {
-    'bg':           '#000000',
+    'bg':           '#151515',
     'fg':           '#ffffff',
     'bg2':          '#202021',
-    'dark-purple':     '#3d375e7f',
-    'purple':          '#a277ff',
-    'dark-green':   '#96a171',
-    'green':        '#61ffca',
-    'dark-yellow':  '#e7a55f',
-    'yellow':       '#ffca85',
-    'dark-blue':    '#7B68EE',
-    'blue':         '#4682B4',
-    'dark-magenta': '#c55858',
-    'magenta':      '#d7adb5',
-    'dark-cyan':    '#80ab96',
-    'cyan':         '#2F4F4F',
+    'red':          '#9a3c3d',
     'dark-gray':    '#3d3d3d',
-    'gray':         '#6d6d6d',
 }
 
 keys = [
@@ -207,7 +195,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='Cascadia Code',
+    font='Jetbrains Mono',
     fontsize=13,
     padding=10,
     background=colors['bg'],
@@ -228,7 +216,7 @@ screens = [
                     borderwidth=0,
                     padding_x=10,
                     highlight_method='line',
-                    block_highlight_text_color=colors['purple'],
+                    block_highlight_text_color=colors['red'],
                     highlight_color=colors['bg2']),
 
                 widget.CurrentLayout(
