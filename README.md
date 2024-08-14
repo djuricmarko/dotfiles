@@ -1,10 +1,5 @@
 <h1 align="center">Dotfiles</h1>
-<h4 align="center">dotfiles by stojanoviicmarko</h4>
-
-
-<p align="center">
-  <img src="screenshots/screenshot.png"> 
-</p>
+<h4 align="center">dotfiles by djuricmarko</h4>
 
 # Stuffs In Rice
 ```
