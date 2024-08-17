@@ -8,15 +8,13 @@ reboot="Reboot"
 sleep="Sleep"
 
 # Get answer from user via rofi
-selected_option=$(echo "$lock
-$logout
+selected_option=$(echo "$logout
 $sleep
 $reboot
 $shutdown" | rofi -dmenu\
                   -i\
                   -p "Power"\
                   -config "~/.config/rofi/powermenu.rasi"\
-                  -font "Cascadia Code 12"\
                   -width "15"\
                   -lines 5\
                   -line-margin 3\
