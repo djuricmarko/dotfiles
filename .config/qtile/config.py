@@ -1,6 +1,6 @@
 import os
 import subprocess
-from typing import List  # noqa: F401
+from typing import List
 from libqtile import qtile
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
@@ -10,12 +10,13 @@ from libqtile.widget import TextBox
 
 mod = "mod4"
 terminal = "kitty"
-browser = "firefox"
+browser = "firefox-developer-edition"
+fileManager = "nemo"
 
 colors = {
     "bg": "#151515",
     "fg": "#ffffff",
-    "bg2": "#202021",
+    "bg2": "#8BA8A4",
     "red": "#9a3c3d",
     "dark-gray": "#3d3d3d",
 }
@@ -24,13 +25,13 @@ keys = [
     # Aplication spawn
     Key([mod], "Return", lazy.spawn(terminal)),
     Key([mod], "b", lazy.spawn(browser)),
-    Key([mod], "p", lazy.spawn("nemo")),
+    Key([mod], "p", lazy.spawn(fileManager)),
     Key([mod], "g", lazy.spawn("galculator")),
-    Key([mod], "t", lazy.spawn("xterm")),
+    Key([mod], "t", lazy.spawn("gnome-terminal")),
     Key([mod], "c", lazy.spawn("code")),
-    Key([mod, "shift"], "Return", lazy.spawn("dmenu_run")),
     Key([mod], "d", lazy.spawn("rofi -show drun")),
-    Key([mod, "shift"], "Tab", lazy.spawn("rofi -show window")),
+    Key([mod], "Tab", lazy.spawn("rofi -show window")),
+    Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
     # SUPER + FUNCTION KEYS
     Key([mod], "f", lazy.window.toggle_fullscreen()),
     Key([mod], "q", lazy.window.kill()),
@@ -133,14 +134,14 @@ keys = [
 
 groups = [
     Group("1", label="1"),
-    Group("2", label="2", matches=[Match(wm_class=["firefox"])]),
-    Group("3", label="3", matches=[Match(wm_class=["nemo"])]),
+    Group("2", label="2", matches=[Match(wm_class=[browser])]),
+    Group("3", label="3"),
     Group(
         "4",
         label="4",
         matches=[Match(wm_class=["zoom", "discord", "telegram-desktop", "slack"])],
     ),
-    Group("5", label="5", matches=[Match(wm_class=["spotify"])]),
+    Group("5", label="5", matches=[Match(wm_class=["deadbeef"])]),
 ]
 
 for i in groups:
@@ -166,7 +167,7 @@ for i in groups:
 layout_theme = {
     "border_width": 2,
     "margin": 20,
-    "border_focus": colors["fg"],
+    "border_focus": colors["bg2"],
 }
 
 layouts = [
@@ -195,12 +196,23 @@ screens = [
                     borderwidth=0,
                     padding=25,
                     highlight_method="line",
-                    block_highlight_text_color=colors["red"],
+                    block_highlight_text_color=colors["bg"],
                     highlight_color=colors["bg2"],
                 ),
                 widget.CurrentLayout(fmt="  {}"),
                 widget.WindowCount(fmt="  {}"),
                 widget.WindowName(fmt="{}"),
+                widget.LaunchBar(
+                    background=colors["bg2"],
+                    foreground=colors["bg"],
+                    padding=20,
+                    progs=[
+                        ('', 'nemo', 'launch thunderbird in safe mode'),
+                        ('', 'firefox-developer-edition', 'launch firefox'),
+                        ('', 'pavucontrol', 'sound settings')
+                    ]
+                ),
+                widget.Spacer(length=20),
                 widget.CheckUpdates(
                     distro="Arch_checkupdates",
                     colour_have_updates=colors["fg"],
@@ -224,7 +236,10 @@ screens = [
                     },
                 ),
                 widget.Volume(background=colors["bg"], fmt="  {}", padding=20),
-                widget.Clock(format="  %H:%M", background=colors["bg"], padding=20),
+                widget.Clock(format="  %A | %d %B %Y | %H:%M", background=colors["bg"], padding=20),
+                widget.KeyboardLayout(
+                    configured_keyboards=['us', 'rs latin', 'rs']
+                ),
                 widget.Systray(background=colors["bg"], icon_size=25, padding=10),
                 widget.TextBox(
                     padding_x=20,
@@ -237,8 +252,8 @@ screens = [
                     },
                 ),
             ],
-            size=60,
-            margin=20,
+            size=50,
+            margin=0,
             background=colors["bg"],
         ),
     ),
@@ -314,7 +329,8 @@ floating_layout = layout.Floating(
         Match(wm_class="cairo-dock"),
     ],
     fullscreen_border_width=0,
-    border_width=0,
+    border_width=2,
+    border_focus= colors["bg2"]
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
