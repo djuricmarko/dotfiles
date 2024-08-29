@@ -6,4 +6,4 @@ configuration {
   show-icons: true;
 }
 
-@theme "/home/elirium/.local/share/rofi/themes/spotlight.rasi"
+@theme "./themes/spotlight.rasi"
